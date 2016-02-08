@@ -1,0 +1,39 @@
+{
+    "helloMessage": {
+        "message": "Hello, I love you, wont tell me your name?\n"
+    },
+    "authentication": {
+    	"askForUserMessage" : "User:",
+    	"askForPasswdMessage": "Password:",
+        "onSuccessMessage": "Hello!",
+        "onInvalidUserMessage": "Wrong! Try again!",
+        "onMaxAttemptsMessage": "Max attempts, sorry!",
+        "maxAttempts": 3,
+        "validUsers": [{
+            "login": "user",
+            "password": "1234",
+            "initialFolder": "/home/user/"
+        }, {
+            "login": "root",
+            "password": "root",
+            "initialFolder": "/root/"
+        }]
+    },
+    "rootMockFolder": "/home/maltempi/telnet-mock",
+    "acceptedCommands": [{
+        "expected": "cd",
+        "type": "literal"
+    }, {
+        "expected": "dir",
+        "type": "emulated",
+        "mock": "ls"
+    }, {
+        "expected": "cat c:\\version",
+        "type": "hardcoded",
+        "mock": "1.0.0"
+    }],
+    "foldersMock": [{
+        "expected": "C:\\temp\\",
+        "mock": "/home/maltempi/temp"
+    }]
+}

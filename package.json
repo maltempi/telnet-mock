@@ -7,5 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "tmmaltempi@gmail.com",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "sol-telnet": "^0.1.1",
+    "websocket": "^1.0.22"
+  }
 }
