@@ -3,6 +3,7 @@ var fs = require('fs');
 var TelnetServerProtocolStream = require('sol-telnet');
 var ConfigModel = require('./configModel');
 var Authentication = require('./authentication');
+var CurrentDirectory = require('./currentDirectory');
 
 var net = require("net");
 
@@ -19,6 +20,8 @@ var server = net.createServer(function (sock) {
 
     this.authentication = new Authentication(configInfo.authentication);
 
+    this.currentDirectory = new CurrentDirectory(configInfo);
+
     this.lastInformationSent = '';
 
     var self = this;
@@ -32,7 +35,9 @@ var server = net.createServer(function (sock) {
         console.log(line);
 
         if (self.authentication.isAuthenticated) {
-            self.sendToClient('Response to: ' + line + '\n');
+            response = self.executeCommand(line);
+            response += '\n' + self.currentDirectory.folder + '>' /* TODO: end of file be a config */;
+            self.sendToClient(response);
         } else {
             if (!self.lastInformationSent) {
                 self.sendToClient(configInfo.helloMessage.message);
@@ -42,13 +47,22 @@ var server = net.createServer(function (sock) {
         }
     });
 
-    ts.on('clientWindowChangedSize', function (width, height) {
-    });
+    ts.on('clientWindowChangedSize', function (width, height) {});
 
     // Something odd...
     ts.on("unhandledCommand", function (data) {
         console.log(data);
     });
+
+    this.executeCommand = function (commandSent) {
+        if (commandSent.indexOf('cd ') > -1) {
+            this.currentDirectory.cd(commandSent);
+            return '';
+        }
+
+        return 'nothing';
+        // TODO: pwd command
+    };
 
     this.authenticationUI = function (message) {
         var authConfig = configInfo.authentication;
@@ -60,6 +74,7 @@ var server = net.createServer(function (sock) {
         } else if (this.lastInformationSent.indexOf(authConfig.askForPasswdMessage) > -1) {
             this.password = message;
             this.sendToClient(this.authentication.authenticateHighLevelMessage(this.user, this.password)); // do authentication here
+            this.currentDirectory.folder = this.authentication.initialFolder;
         } else {
             this.sendToClient(authConfig.askForUserMessage);
             return;
@@ -68,6 +83,7 @@ var server = net.createServer(function (sock) {
 
     this.sendToClient = function (message) {
         self.lastInformationSent = message;
+        console.log(message);
         ts.send(message);
     }
 

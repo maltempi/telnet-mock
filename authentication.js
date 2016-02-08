@@ -3,6 +3,7 @@ var Authentication = function (authenticationConfig) {
     this.authenticationConfig = authenticationConfig;
     this.isAuthenticated = false;
     this.attempts = 0;
+    this.initialFolder = '';
 }
 
 Authentication.prototype.authenticate = function (user, password) {
@@ -16,6 +17,7 @@ Authentication.prototype.authenticate = function (user, password) {
     this.authenticationConfig.validUsers.forEach(function (element) {
         if (element.user === user || element.password === password) {
             self.isAuthenticated = true;
+            self.initialFolder = element.initialFolder;
         }
     });
 

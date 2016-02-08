@@ -12,7 +12,7 @@ describe('CD Path', function () {
 
         it('/home/maltempi to /etc/init.d/', function () {
 	        var currentDirectory = new CurrentDirectory(config, '/home/maltempi/');
-            currentDirectory.cd('/etc/init.d/');
+            currentDirectory.cd('cd /etc/init.d/');
             assert.equal(currentDirectory.folder, '/etc/init.d/');
         });
     });
@@ -25,7 +25,7 @@ describe('CD Path', function () {
 
         it('C:\\Program Files\\ to C:\\users\\maltempi', function () {
 	        var currentDirectory = new CurrentDirectory(config, 'C:\\Program Files\\');
-            currentDirectory.cd('C:\\users\\maltempi\\');
+            currentDirectory.cd('cd C:\\users\\maltempi\\');
             assert.equal(currentDirectory.folder, 'C:\\users\\maltempi\\');
         });
     });

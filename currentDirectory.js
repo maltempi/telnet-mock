@@ -4,7 +4,7 @@ var CurrentDirectory = function (config, initialFolder) {
 }
 
 CurrentDirectory.prototype.cd = function (pDirectory) {
-
+    pDirectory = pDirectory.replace(/\s*cd\s+/, '');
     var firstChar = pDirectory.slice(0, 1);
     var threeFirstChars = pDirectory.slice(0, 3);
     var directory = '';
@@ -16,9 +16,9 @@ CurrentDirectory.prototype.cd = function (pDirectory) {
         var lastChar = this.folder.slice(-1);
 
         if (lastChar === this.config.path) {
-            directory = this.folder + directory;
+            directory = this.folder + pDirectory;
         } else {
-            directory = this.folder + this.config.path + directory;
+            directory = this.folder + this.config.path + pDirectory;
         }
     }
 
@@ -31,12 +31,12 @@ CurrentDirectory.prototype.cd = function (pDirectory) {
         directory = '';
     }
 
-    console.log(folders);
-
     folders.forEach(function (folder) {
         if (folder !== '') {
             if (folder === '..') {
-                self.backOne(folder);
+                console.log('back one from -> ' + directory);
+                directory = self.backOne(directory);
+                console.log('->' + directory);
             } else {
                 directory += folder + self.config.path;
             }
@@ -65,7 +65,13 @@ CurrentDirectory.prototype.backOne = function (folder) {
 
     var indexOfLastSlash = directory.lastIndexOf(this.config.path);
 
-    this.folder = directory.substring(0, indexOfLastSlash + 1);
+    var result = directory.substring(0, indexOfLastSlash + 1);
+
+    if (folder) {
+        this.folder = directory.substring(0, indexOfLastSlash + 1);
+    }
+
+    return result;
 };
 
 module.exports = CurrentDirectory;
