@@ -19,7 +19,7 @@ var server = net.createServer(function (sock) {
 
     this.authentication = new Authentication(configInfo.authentication);
 
-    this.lastInformationSent = "";
+    this.lastInformationSent = '';
 
     var self = this;
 
@@ -37,6 +37,7 @@ var server = net.createServer(function (sock) {
             if (!self.lastInformationSent) {
                 self.sendToClient(configInfo.helloMessage.message);
             }
+
             self.authenticationUI(line);
         }
     });

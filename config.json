@@ -1,4 +1,6 @@
 {
+	"pathSeparator" : "\\",
+	"os" : "windows",
     "helloMessage": {
         "message": "Hello, I love you, wont tell me your name?\n"
     },
