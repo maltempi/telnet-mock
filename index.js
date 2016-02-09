@@ -40,22 +40,29 @@ var server = net.createServer(function (sock) {
 
         if (self.authentication.isAuthenticated) {
             response = self.executeCommand(line);
-            response += '\n' + self.currentDirectory.folder + '>' /* TODO: end of file be a config */;
+            response += '\n' + self.currentDirectory.folder + '>' /* TODO: end of file be a config */ ;
             self.sendToClient(response);
         } else {
-            if (!self.lastInformationSent) {
-                self.sendToClient(configInfo.helloMessage.message);
-            }
-
             self.authenticationUI(line);
         }
     });
 
-    ts.on('clientWindowChangedSize', function (width, height) {});
+    ts.on('clientWindowChangedSize', function (width, height) {
+        if (!self.lastInformationSent) {
+            self.sendToClient(configInfo.helloMessage.message);
+        }
+    });
 
     // Something odd...
     ts.on("unhandledCommand", function (data) {
-        console.log(data);
+        console.log('unhandledCommand -> ' + data);
+
+        // No negotiate About Window Size
+        if (data.command === 252 && data.option === 31) {
+            if (!self.lastInformationSent) {
+                self.sendToClient(configInfo.helloMessage.message);
+            }
+        }
     });
 
     this.executeCommand = function (commandSent) {
