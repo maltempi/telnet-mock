@@ -4,13 +4,17 @@ var TelnetServerProtocolStream = require('sol-telnet');
 var ConfigModel = require('./configModel');
 var Authentication = require('./authentication');
 var CurrentDirectory = require('./currentDirectory');
+var argv = require('minimist')(process.argv.slice(2));
+
+// Catch params from commandline
+var configFilePath = argv.configFile || argv.c || './config.json';
+var port = argv.port || argv.p || '3000';
 
 var net = require("net");
 
 var config;
 
-// TODO: get from commandline
-var jsonFs = fs.readFileSync('/home/maltempi/workspace/estudos/telnet-mock/config.json', 'utf8')
+var jsonFs = fs.readFileSync(configFilePath, 'utf8')
 
 config = new ConfigModel(jsonFs);
 
@@ -92,7 +96,6 @@ var server = net.createServer(function (sock) {
 
 })
 
-// TODO: get from commandline
-server.listen(3000);
+server.listen(port);
 
-console.log('The server is up! Listening on localhost:3000');
+console.log('The server is up! Listening on ' + port);
