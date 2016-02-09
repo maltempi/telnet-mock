@@ -44,6 +44,12 @@ CurrentDirectory.prototype.cd = function (pDirectory) {
     });
 
     this.folder = directory;
+
+    return this.folder;
+};
+
+CurrentDirectory.prototype.pwd = function() {
+    return this.folder;
 };
 
 CurrentDirectory.prototype.backOne = function (folder) {
@@ -67,7 +73,7 @@ CurrentDirectory.prototype.backOne = function (folder) {
 
     var result = directory.substring(0, indexOfLastSlash + 1);
 
-    if (folder) {
+    if (!folder) {
         this.folder = directory.substring(0, indexOfLastSlash + 1);
     }
 

@@ -11,9 +11,9 @@ describe('CD Path', function () {
         };
 
         it('/home/maltempi to /etc/init.d/', function () {
-	        var currentDirectory = new CurrentDirectory(config, '/home/maltempi/');
+            var currentDirectory = new CurrentDirectory(config, '/home/maltempi/');
             currentDirectory.cd('cd /etc/init.d/');
-            assert.equal(currentDirectory.folder, '/etc/init.d/');
+            assert.equal(currentDirectory.pwd(), '/etc/init.d/');
         });
     });
 
@@ -24,12 +24,13 @@ describe('CD Path', function () {
         };
 
         it('C:\\Program Files\\ to C:\\users\\maltempi', function () {
-	        var currentDirectory = new CurrentDirectory(config, 'C:\\Program Files\\');
+            var currentDirectory = new CurrentDirectory(config, 'C:\\Program Files\\');
             currentDirectory.cd('cd C:\\users\\maltempi\\');
-            assert.equal(currentDirectory.folder, 'C:\\users\\maltempi\\');
+            assert.equal(currentDirectory.pwd(), 'C:\\users\\maltempi\\');
         });
     });
 });
+
 
 describe('Backing just one directory', function () {
 
@@ -42,17 +43,17 @@ describe('Backing just one directory', function () {
 
         it('/home/maltempi -> should back one', function () {
             currentDirectory.backOne();
-            assert.equal(currentDirectory.folder, '/home/');
+            assert.equal(currentDirectory.pwd(), '/home/');
         });
 
         it('/home/ -> should back to root folder', function () {
             currentDirectory.backOne();
-            assert.equal(currentDirectory.folder, '/');
+            assert.equal(currentDirectory.pwd(), '/');
         });
 
         it('/ -> should do nothing', function () {
             currentDirectory.backOne();
-            assert.equal(currentDirectory.folder, '/');
+            assert.equal(currentDirectory.pwd(), '/');
         });
     });
 
@@ -65,17 +66,17 @@ describe('Backing just one directory', function () {
 
         it('c:\\users\\maltempi\\ -> should back one', function () {
             currentDirectory.backOne();
-            assert.equal(currentDirectory.folder, 'C:\\users\\');
+            assert.equal(currentDirectory.pwd(), 'C:\\users\\');
         });
 
         it('c:\\users\\ -> should back to root folder', function () {
             currentDirectory.backOne();
-            assert.equal(currentDirectory.folder, 'C:\\');
+            assert.equal(currentDirectory.pwd(), 'C:\\');
         });
 
         it('c:\\ -> should do nothing', function () {
             currentDirectory.backOne();
-            assert.equal(currentDirectory.folder, 'C:\\');
+            assert.equal(currentDirectory.pwd(), 'C:\\');
         });
     });
 
@@ -89,7 +90,7 @@ describe('Backing just one directory', function () {
 
         it('/home/maltempi -> should back one', function () {
             currentDirectory.backOne();
-            assert.equal(currentDirectory.folder, '/home/');
+            assert.equal(currentDirectory.pwd(), '/home/');
         });
     });
 
@@ -102,7 +103,7 @@ describe('Backing just one directory', function () {
 
         it('c:\\users\\maltempi -> should back one', function () {
             currentDirectory.backOne();
-            assert.equal(currentDirectory.folder, 'C:\\users\\');
+            assert.equal(currentDirectory.pwd(), 'C:\\users\\');
         });
     });
 

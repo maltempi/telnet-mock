@@ -60,8 +60,11 @@ var server = net.createServer(function (sock) {
             return '';
         }
 
+        if (/^pwd\s*/.test(commandSent)) {
+            return this.currentDirectory.pwd();
+        }
+
         return 'nothing';
-        // TODO: pwd command
     };
 
     this.authenticationUI = function (message) {
