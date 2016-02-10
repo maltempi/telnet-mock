@@ -4,6 +4,7 @@ var TelnetServerProtocolStream = require('sol-telnet');
 var ConfigModel = require('./configModel');
 var Authentication = require('./authentication');
 var CurrentDirectory = require('./currentDirectory');
+var FolderNotFoundValidator = require('./folderNotFound');
 var argv = require('minimist')(process.argv.slice(2));
 
 // Catch params from commandline
@@ -67,6 +68,11 @@ var server = net.createServer(function (sock) {
     });
 
     this.executeCommand = function (commandSent) {
+
+        if (! new FolderNotFoundValidator(configInfo).isExist) {
+            return configInfo.folderNotFoundMessage.message;
+        }
+
         if (commandSent.indexOf('cd ') > -1) {
             this.currentDirectory.cd(commandSent);
             return '';
