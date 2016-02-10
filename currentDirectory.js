@@ -5,6 +5,7 @@ var CurrentDirectory = function (config, initialFolder) {
 
 CurrentDirectory.prototype.cd = function (pDirectory) {
     pDirectory = pDirectory.replace(/\s*cd\s+/, '');
+    pDirectory = pDirectory.replace(/\"/g, '');
     var firstChar = pDirectory.slice(0, 1);
     var threeFirstChars = pDirectory.slice(0, 3);
     var directory = '';
@@ -28,27 +29,58 @@ CurrentDirectory.prototype.cd = function (pDirectory) {
     if (this.config.os === 'linux') {
         directory = directory.slice(0, 1);
     } else {
-        directory = '';
+        if (directory.slice(0, 1) === this.config.path) {
+            directory = this.folder.slice(0, 3);
+        } else {
+            directory = '';
+        }
     }
 
     folders.forEach(function (folder) {
         if (folder !== '') {
             if (folder === '..') {
-                console.log('back one from -> ' + directory);
                 directory = self.backOne(directory);
-                console.log('->' + directory);
             } else {
                 directory += folder + self.config.path;
             }
         }
     });
 
+    directory = this.removeLastSlash(directory)
+
     this.folder = directory;
 
     return this.folder;
 };
 
-CurrentDirectory.prototype.pwd = function() {
+
+CurrentDirectory.prototype.shouldRemoveLastSlash = function (path) {
+
+    var minPathLen = this.config.os === 'windows' ? 3 : 1;
+
+    if (path.slice(-1) === this.config.path) {
+        if (path.length > minPathLen) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+
+CurrentDirectory.prototype.removeLastSlash = function (path) {
+    var result = path;
+
+    if (this.shouldRemoveLastSlash(result)) {
+        result = result.substring(0, result.length - 1);
+    }
+
+
+    return result;
+}
+
+
+CurrentDirectory.prototype.pwd = function () {
     return this.folder;
 };
 
@@ -73,8 +105,10 @@ CurrentDirectory.prototype.backOne = function (folder) {
 
     var result = directory.substring(0, indexOfLastSlash + 1);
 
+    result = this.removeLastSlash(result);
+
     if (!folder) {
-        this.folder = directory.substring(0, indexOfLastSlash + 1);
+        this.folder = result;
     }
 
     return result;

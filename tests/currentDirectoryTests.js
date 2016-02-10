@@ -13,7 +13,7 @@ describe('CD Path', function () {
         it('/home/maltempi to /etc/init.d/', function () {
             var currentDirectory = new CurrentDirectory(config, '/home/maltempi/');
             currentDirectory.cd('cd /etc/init.d/');
-            assert.equal(currentDirectory.pwd(), '/etc/init.d/');
+            assert.equal(currentDirectory.pwd(), '/etc/init.d');
         });
     });
 
@@ -26,7 +26,33 @@ describe('CD Path', function () {
         it('C:\\Program Files\\ to C:\\users\\maltempi', function () {
             var currentDirectory = new CurrentDirectory(config, 'C:\\Program Files\\');
             currentDirectory.cd('cd C:\\users\\maltempi\\');
-            assert.equal(currentDirectory.pwd(), 'C:\\users\\maltempi\\');
+            assert.equal(currentDirectory.pwd(), 'C:\\users\\maltempi');
+        });
+    });
+
+    describe('Windows chaotic scenarios', function () {
+        var config = {
+            path: '\\',
+            os: 'windows'
+        };
+
+        it('Many .. on the path', function () {
+            var currentDirectory = new CurrentDirectory(config, 'C:\\maltemper');
+            currentDirectory.cd('cd C:\\Program Files\\..\\temp\\abc\\..\\..\\Program Files\\');
+            assert.equal(currentDirectory.pwd(), 'C:\\Program Files');
+        });
+
+        it('With slash on begin of the path', function () {
+            var currentDirectory = new CurrentDirectory(config, 'C:\\maltemper');
+            currentDirectory.cd('cd \\Program Files\\..\\temp\\abc\\..\\..\\Program Files\\');
+            assert.equal(currentDirectory.pwd(), 'C:\\Program Files');
+        });
+
+
+        it('With slash on begin of the path, but on D:\\ drive', function () {
+            var currentDirectory = new CurrentDirectory(config, 'D:\\maltemper');
+            currentDirectory.cd('cd \\Program Files\\..\\temp\\abc\\..\\..\\Program Files\\');
+            assert.equal(currentDirectory.pwd(), 'D:\\Program Files');
         });
     });
 });
@@ -43,7 +69,7 @@ describe('Backing just one directory', function () {
 
         it('/home/maltempi -> should back one', function () {
             currentDirectory.backOne();
-            assert.equal(currentDirectory.pwd(), '/home/');
+            assert.equal(currentDirectory.pwd(), '/home');
         });
 
         it('/home/ -> should back to root folder', function () {
@@ -66,7 +92,7 @@ describe('Backing just one directory', function () {
 
         it('c:\\users\\maltempi\\ -> should back one', function () {
             currentDirectory.backOne();
-            assert.equal(currentDirectory.pwd(), 'C:\\users\\');
+            assert.equal(currentDirectory.pwd(), 'C:\\users');
         });
 
         it('c:\\users\\ -> should back to root folder', function () {
@@ -90,7 +116,7 @@ describe('Backing just one directory', function () {
 
         it('/home/maltempi -> should back one', function () {
             currentDirectory.backOne();
-            assert.equal(currentDirectory.pwd(), '/home/');
+            assert.equal(currentDirectory.pwd(), '/home');
         });
     });
 
@@ -103,7 +129,7 @@ describe('Backing just one directory', function () {
 
         it('c:\\users\\maltempi -> should back one', function () {
             currentDirectory.backOne();
-            assert.equal(currentDirectory.pwd(), 'C:\\users\\');
+            assert.equal(currentDirectory.pwd(), 'C:\\users');
         });
     });
 
@@ -129,7 +155,7 @@ describe('Backing just one directory', function () {
             path: '/'
         };
 
-        var currentDirectory = new CurrentDirectory(config, '/home/maltempi/');
+        var currentDirectory = new CurrentDirectory(config, '/home/maltempi');
 
         it('should throw exception', function () {
             assert.throws(function () {

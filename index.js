@@ -36,11 +36,10 @@ var server = net.createServer(function (sock) {
 
     // Every time you get a NULL LF you get a line. 
     ts.on('lineReceived', function (line) {
-        console.log(line);
+        console.log('Command Received ->' + line);
 
         if (self.authentication.isAuthenticated) {
             response = self.executeCommand(line);
-            response += '\n' + self.currentDirectory.folder + '>' /* TODO: end of file be a config */ ;
             self.sendToClient(response);
         } else {
             self.authenticationUI(line);
@@ -50,17 +49,19 @@ var server = net.createServer(function (sock) {
     ts.on('clientWindowChangedSize', function (width, height) {
         if (!self.lastInformationSent) {
             self.sendToClient(configInfo.helloMessage.message);
+            self.authenticationUI();
         }
     });
 
     // Something odd...
-    ts.on("unhandledCommand", function (data) {
+    ts.on('unhandledCommand', function (data) {
         console.log('unhandledCommand -> ' + data);
 
         // No negotiate About Window Size
         if (data.command === 252 && data.option === 31) {
             if (!self.lastInformationSent) {
                 self.sendToClient(configInfo.helloMessage.message);
+                self.authenticationUI();
             }
         }
     });
@@ -87,8 +88,9 @@ var server = net.createServer(function (sock) {
             return;
         } else if (this.lastInformationSent.indexOf(authConfig.askForPasswdMessage) > -1) {
             this.password = message;
-            this.sendToClient(this.authentication.authenticateHighLevelMessage(this.user, this.password)); // do authentication here
-            this.currentDirectory.folder = this.authentication.initialFolder;
+            var authMessage = this.authentication.authenticateHighLevelMessage(this.user, this.password)
+            self.currentDirectory.folder = self.authentication.initialFolder;
+            this.sendToClient(authMessage); // do authentication here
         } else {
             this.sendToClient(authConfig.askForUserMessage);
             return;
@@ -97,7 +99,13 @@ var server = net.createServer(function (sock) {
 
     this.sendToClient = function (message) {
         self.lastInformationSent = message;
-        console.log(message);
+
+        if (self.currentDirectory.folder) {
+            message += '\n' + self.currentDirectory.folder + '>' /* TODO: end of file be a config */ ;
+        }
+
+        console.log('Message sent -> ' + message);
+
         ts.send(message);
     }
 
