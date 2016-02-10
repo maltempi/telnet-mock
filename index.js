@@ -69,7 +69,7 @@ var server = net.createServer(function (sock) {
 
     this.executeCommand = function (commandSent) {
 
-        if (! new FolderNotFoundValidator(configInfo).isExist) {
+        if (! new FolderNotFoundValidator(configInfo, commandSent).isExist) {
             return configInfo.folderNotFoundMessage.message;
         }
 
@@ -113,9 +113,13 @@ var server = net.createServer(function (sock) {
         console.log('Message sent -> ' + message);
 
         ts.send(message);
-    }
+    };
 
-})
+    if (!self.lastInformationSent) {
+        self.sendToClient(configInfo.helloMessage.message);
+        self.authenticationUI();
+    }
+});
 
 server.listen(port);
 

@@ -1,5 +1,4 @@
 var Authentication = function (authenticationConfig) {
-    console.log('-> ' + authenticationConfig);
     this.authenticationConfig = authenticationConfig;
     this.isAuthenticated = false;
     this.attempts = 0;
@@ -18,7 +17,6 @@ Authentication.prototype.authenticate = function (user, password) {
         if (element.user === user || element.password === password) {
             self.isAuthenticated = true;
             self.initialFolder = element.initialFolder;
-            console.log("auth ->" + self.initialFolder);
         }
     });
 

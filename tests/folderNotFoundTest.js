@@ -17,12 +17,36 @@ describe('Folder exists', function () {
         };
 
         it('should return true', function () {
-            var folderValidator = new FolderNotFoundValidator(config, 'c:\\existentFolder\\');
+            var folderValidator = new FolderNotFoundValidator(config, 'c:\\');
             assert.equal(folderValidator.isExist, true);
         });
 
         it('should return false', function () {
-            var folderValidator = new FolderNotFoundValidator(config, 'c:\\program files\\');
+            var folderValidator = new FolderNotFoundValidator(config, '"c:\\program files\\"');
+            assert.equal(folderValidator.isExist, false);
+        });
+    });
+
+
+    describe('Windows with slash on start', function () {
+        var config = {
+            path: '\\',
+            os: 'windows',
+            foldersNotFound: [
+                'c:\\program files\\'
+            ],
+            folderNotFoundMessage: {
+                "message": "Not Found"
+            }
+        };
+
+        it('should return true', function () {
+            var folderValidator = new FolderNotFoundValidator(config, '\\existentFolder\\');
+            assert.equal(folderValidator.isExist, true);
+        });
+
+        it('should return false', function () {
+            var folderValidator = new FolderNotFoundValidator(config, '"\\program files\\"');
             assert.equal(folderValidator.isExist, false);
         });
     });
@@ -46,7 +70,7 @@ describe('Folder exists', function () {
         });
 
         it('should return false', function () {
-            var folderValidator = new FolderNotFoundValidator(config, 'c:\\program files\\');
+            var folderValidator = new FolderNotFoundValidator(config, '"c:\\program files\\"');
             assert.equal(folderValidator.isExist, false);
         });
     });
@@ -70,7 +94,7 @@ describe('Folder exists', function () {
         });
 
         it('should return false', function () {
-            var folderValidator = new FolderNotFoundValidator(config, 'c:\\program files');
+            var folderValidator = new FolderNotFoundValidator(config, '"c:\\program files"');
             assert.equal(folderValidator.isExist, false);
         });
     });
@@ -89,26 +113,31 @@ describe('Folder exists', function () {
         };
 
         it('should return false', function () {
-            var folderValidator = new FolderNotFoundValidator(config, 'C:\\Program Files');
+            var folderValidator = new FolderNotFoundValidator(config, '"C:\\Program Files"');
             assert.equal(folderValidator.isExist, false);
         });
     });
 
 
-    describe('Case sensitive - Linux', function () {
+    describe('NOT IMPLEMENTED YET - Case sensitive - Linux', function () {
         var config = {
             path: '/',
             os: 'linux',
             foldersNotFound: [
-                'c:\\program files\\'
+                '/dev/program files/'
             ],
             folderNotFoundMessage: {
                 "message": "Not Found"
             }
         };
 
+        it('should return true', function () {
+            var folderValidator = new FolderNotFoundValidator(config, '"/dev/program Files"');
+            assert.equal(folderValidator.isExist, true);
+        });
+
         it('should return false', function () {
-            var folderValidator = new FolderNotFoundValidator(config, 'C:\\Program Files');
+            var folderValidator = new FolderNotFoundValidator(config, '"/dev/program files/"');
             assert.equal(folderValidator.isExist, false);
         });
     });
@@ -132,8 +161,14 @@ describe('Folder exists', function () {
         });
 
         it('should return false', function () {
-            var folderValidator = new FolderNotFoundValidator(config, 'Dir c:\\program files\\test /t:w');
+            var folderValidator = new FolderNotFoundValidator(config, 'Dir "c:\\program files\\test" /t:w');
             assert.equal(folderValidator.isExist, false);
         });
+
+        it('should return ', function () {
+            var folderValidator = new FolderNotFoundValidator(config, 'Dir "\\program files\\test" /t:w');
+            assert.equal(folderValidator.isExist, false);
+        });
+
     });
 });
