@@ -4,6 +4,12 @@ var CurrentDirectory = function (config, initialFolder) {
 }
 
 CurrentDirectory.prototype.cd = function (pDirectory) {
+    this.folder = this.getMountedPath(this.folder, pDirectory);
+    return this.folder;
+};
+
+
+CurrentDirectory.prototype.getMountedPath = function (currentPath, pDirectory) {
     pDirectory = pDirectory.replace(/\s*cd\s+/, '');
     pDirectory = pDirectory.replace(/\"/g, '');
     var firstChar = pDirectory.slice(0, 1);
@@ -40,6 +46,8 @@ CurrentDirectory.prototype.cd = function (pDirectory) {
         if (folder !== '') {
             if (folder === '..') {
                 directory = self.backOne(directory);
+            } else if (folder === '.') {
+                directory += ''; // Does nothing :D
             } else {
                 directory += folder + self.config.path;
             }
@@ -48,11 +56,8 @@ CurrentDirectory.prototype.cd = function (pDirectory) {
 
     directory = this.removeLastSlash(directory)
 
-    this.folder = directory;
-
-    return this.folder;
+    return directory;
 };
-
 
 CurrentDirectory.prototype.shouldRemoveLastSlash = function (path) {
 

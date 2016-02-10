@@ -54,6 +54,32 @@ describe('CD Path', function () {
             currentDirectory.cd('cd \\Program Files\\..\\temp\\abc\\..\\..\\Program Files\\');
             assert.equal(currentDirectory.pwd(), 'D:\\Program Files');
         });
+
+
+        it('With a dot on begining', function () {
+            var currentDirectory = new CurrentDirectory(config, 'D:\\maltemper');
+            currentDirectory.cd('cd .\\test');
+            assert.equal(currentDirectory.pwd(), 'D:\\maltemper\\test');
+        });
+    });
+
+    describe('Linux chaotic scenarios', function () {
+        var config = {
+            path: '/',
+            os: 'linux'
+        };
+
+        it('Many .. on the path', function () {
+            var currentDirectory = new CurrentDirectory(config, '/maltemper');
+            currentDirectory.cd('cd /Program Files/../temp/abc/../../Program Files/');
+            assert.equal(currentDirectory.pwd(), '/Program Files');
+        });
+
+        it('Many . on the path', function () {
+            var currentDirectory = new CurrentDirectory(config, '/maltemper');
+            currentDirectory.cd('cd /Program Files/./temp/abc/././def/');
+            assert.equal(currentDirectory.pwd(), '/Program Files/temp/abc/def');
+        });
     });
 });
 
