@@ -29,7 +29,13 @@ FolderNotFoundValidator.prototype.exists = function (folderPath) {
             });
         }
     } else {
-        // TODO here we will need process spaces on linux. Spaces on linux paths have \
+        matches = /[\s*\/].*\s.*(\s+|$)/.exec(folderPath);
+        if (matches) {
+            matches.forEach(function (match) {
+                folders.push(match);
+                folderPath = folderPath.replace(match, '');
+            });
+        }
     }
 
     // now on folderPath, we only have folders without spaces.

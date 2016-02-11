@@ -119,7 +119,7 @@ describe('Folder exists', function () {
     });
 
 
-    describe('NOT IMPLEMENTED YET - Case sensitive - Linux', function () {
+    describe('Case sensitive - Linux', function () {
         var config = {
             path: '/',
             os: 'linux',
@@ -132,12 +132,12 @@ describe('Folder exists', function () {
         };
 
         it('should return true', function () {
-            var folderValidator = new FolderNotFoundValidator(config, '"/dev/program Files"');
+            var folderValidator = new FolderNotFoundValidator(config, '/dev/program Files/');
             assert.equal(folderValidator.isExist, true);
         });
 
         it('should return false', function () {
-            var folderValidator = new FolderNotFoundValidator(config, '"/dev/program files/"');
+            var folderValidator = new FolderNotFoundValidator(config, '/dev/program files/');
             assert.equal(folderValidator.isExist, false);
         });
     });
