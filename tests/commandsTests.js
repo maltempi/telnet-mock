@@ -31,11 +31,11 @@ describe('Exec commands: text type', function () {
                     "filePath": "2.txt"
                 }
             },{
-                "command": "touch /home/maltempi/d+.csv",
+                "command": "cat /home/maltempi/\\d+.csv",
                 "regex": true,
                 "result": {
                     "type": "text",
-                    "response": ""
+                    "response": "maoe,vem pra ca vem pra ca,quem quer dinheiro?"
                 }
             }]
         };
@@ -72,7 +72,11 @@ describe('Exec commands: text type', function () {
             file = config.mockCommandsFilesFolder + "/2.txt"
             assert.equal(result, 'Telnet Mock exception: The file ' + file + ' does not exists!');
         });
-        // should return content file from regex command
+
+        it('should return content file from regex command', function() {
+            result = cmd.exec('cat /home/maltempi/123456.csv');
+            assert.equal(result, 'maoe,vem pra ca vem pra ca,quem quer dinheiro?');
+        });
     });
 
     describe('Windows happy way', function () {
@@ -96,11 +100,11 @@ describe('Exec commands: text type', function () {
                     "filePath": "cacildes.txt"
                 }
             }, {
-                "command": 'find /c /v "" /home/maltempi/d+.csv',
+                "command": 'find /c /v "" c:\\\\maltempi\\\\\\d+.csv',
                 "regex": true,
                 "result": {
                     "type": "text",
-                    "response": ""
+                    "response": "maoe,vem pra ca vem pra ca,quem quer dinheiro?"
                 }
             },
             {
@@ -135,7 +139,10 @@ describe('Exec commands: text type', function () {
             assert.equal(result, 'Telnet Mock exception: The file ' + file + ' does not exists!');
         });
 
-        // should return content file from regex command
+        it('should return content file from regex command', function() {
+            result = cmd.exec('find /c /v "" c:\\maltempi\\20160101.csv');
+            assert.equal(result, 'maoe,vem pra ca vem pra ca,quem quer dinheiro?');
+        });
     });
 
     // TODO: windows happy way

@@ -46,15 +46,16 @@ CommandsMock.prototype.exec = function (pCommand) {
 };
 
 CommandsMock.prototype.matchRegex = function (command, regex) {
-    var regex;
+    var regexExp;
+    //regex = regex.replace(/\\/g, '\\\\');
 
     if (this.isCaseSensitive) {
-        regex = new RegExp(regex);
+        regexExp = new RegExp(regex);
     } else {
-        regex = new RegExp(regex + '/i');
+        regexExp = new RegExp(regex, 'i');
     }
 
-    return regex.test(command);
+    return regexExp.test(command);
 };
 
 CommandsMock.prototype.matchLiteral = function (commandSent, commandSetted) {
