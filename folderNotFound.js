@@ -10,7 +10,7 @@ var FolderNotFoundValidator = function (config, folderPath) {
 };
 
 /**
-    TODO A ugly method. Im really want refactory that :D
+    TODO: It has been a ugly method. I really want refactor that :D
 */
 FolderNotFoundValidator.prototype.exists = function (folderPath) {
     var exists = true;

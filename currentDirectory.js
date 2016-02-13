@@ -8,7 +8,6 @@ CurrentDirectory.prototype.cd = function (pDirectory) {
     return this.folder;
 };
 
-
 CurrentDirectory.prototype.getMountedPath = function (currentPath, pDirectory) {
     pDirectory = pDirectory.replace(/\s*cd\s+/, '');
     pDirectory = pDirectory.replace(/\"/g, '');

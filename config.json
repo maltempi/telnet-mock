@@ -2,7 +2,7 @@
   "path": "/",
   "os": "linux",
   "helloMessage": {
-    "message": "Hello, I love you, wont tell me your name?\n"
+    "message": "Hello, I love you, wont tell me your name? - Doors\n"
   },
   "authentication": {
     "askForUserMessage": "User:",
@@ -24,22 +24,6 @@
       }
     ]
   },
-  "acceptedCommands": [
-    {
-      "expected": "cd",
-      "type": "literal"
-    },
-    {
-      "expected": "dir",
-      "type": "emulated",
-      "mock": "ls"
-    },
-    {
-      "expected": "cat c:\\version",
-      "type": "hardcoded",
-      "mock": "1.0.0"
-    }
-  ],
   "foldersNotFound": [
     "/root/nf"
   ],
@@ -50,6 +34,34 @@
     {
       "expected": "C:\\temp\\",
       "mock": "/home/maltempi/temp"
+    }
+  ],
+  "mockCommandsFilesFolder": "/home/maltempi/mock-telnet/",
+  "commandNotFoundMessage": {
+    "message": "command not found"
+  },
+  "commandsMock": [
+    {
+      "command": "ls /home/maltempi/some_folder",
+      "result": {
+        "type": "text",
+        "response": "oneFolder/  oneFile.txt\notherFolder\notherfile.txt"
+      }
+    },
+    {
+      "command": "cat someFile.txt",
+      "result": {
+        "type": "resultInFile",
+        "filePath": "./cat_someFile.txt"
+      }
+    },
+    {
+      "command": "touch /home/maltempi/d+.csv",
+      "regex" : true,
+      "result": {
+        "type": "text",
+        "response": ""
+      }
     }
   ]
 }
