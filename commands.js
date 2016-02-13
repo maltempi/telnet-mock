@@ -47,7 +47,10 @@ CommandsMock.prototype.exec = function (pCommand) {
 
 CommandsMock.prototype.matchRegex = function (command, regex) {
     var regexExp;
-    //regex = regex.replace(/\\/g, '\\\\');
+
+    regex = regex.replace(/\{bslash\}/g, '\\\\');
+
+    console.log(regex);
 
     if (this.isCaseSensitive) {
         regexExp = new RegExp(regex);

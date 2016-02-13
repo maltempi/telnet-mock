@@ -23,14 +23,13 @@ describe('Exec commands: text type', function () {
                     "type": "resultInFile",
                     "filePath": "cacildes.txt"
                 }
-            }, 
-            {
+            }, {
                 "command": "cat cacildes2.txt",
                 "result": {
                     "type": "resultInFile",
                     "filePath": "2.txt"
                 }
-            },{
+            }, {
                 "command": "cat /home/maltempi/\\d+.csv",
                 "regex": true,
                 "result": {
@@ -67,13 +66,13 @@ describe('Exec commands: text type', function () {
             assert.equal(result, config.commandNotFoundMessage.message);
         });
 
-        it('should fileNotFound message', function() {
+        it('should fileNotFound message', function () {
             result = cmd.exec('cat cacildes2.txt');
             file = config.mockCommandsFilesFolder + "/2.txt"
             assert.equal(result, 'Telnet Mock exception: The file ' + file + ' does not exists!');
         });
 
-        it('should return content file from regex command', function() {
+        it('should return content file from regex command', function () {
             result = cmd.exec('cat /home/maltempi/123456.csv');
             assert.equal(result, 'maoe,vem pra ca vem pra ca,quem quer dinheiro?');
         });
@@ -106,12 +105,18 @@ describe('Exec commands: text type', function () {
                     "type": "text",
                     "response": "maoe,vem pra ca vem pra ca,quem quer dinheiro?"
                 }
-            },
-            {
+            }, {
                 "command": "type cacildes2.txt",
                 "result": {
                     "type": "resultInFile",
                     "filePath": "2.txt"
+                }
+            }, {
+                "command": 'find test c:{bslash}maltempi{bslash}\\d+.csv',
+                "regex": true,
+                "result": {
+                    "type": "text",
+                    "response": "maoe,vem pra ca vem pra ca,quem quer dinheiro?"
                 }
             }]
         };
@@ -133,17 +138,15 @@ describe('Exec commands: text type', function () {
             assert.equal(result.length, 3182);
         });
 
-        it('should fileNotFound message', function() {
+        it('should fileNotFound message', function () {
             result = cmd.exec('type cacildes2.txt');
             file = config.mockCommandsFilesFolder + "/2.txt"
             assert.equal(result, 'Telnet Mock exception: The file ' + file + ' does not exists!');
         });
 
-        it('should return content file from regex command', function() {
-            result = cmd.exec('find /c /v "" c:\\maltempi\\20160101.csv');
+        it('should return content file from regex command', function () {
+            result = cmd.exec('find test c:\\maltempi\\20160101.csv');
             assert.equal(result, 'maoe,vem pra ca vem pra ca,quem quer dinheiro?');
         });
     });
-
-    // TODO: windows happy way
 });
