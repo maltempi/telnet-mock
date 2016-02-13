@@ -50,6 +50,16 @@ describe('Exec commands: text type', function () {
             assert.equal(result.length, 3182);
         });
 
+        it('should not found on case sensitive (on regex case)', function () {
+            result = cmd.exec('Cat /home/maltempi/anywhere/cacildes.txt');
+            assert.equal(result, config.commandNotFoundMessage.message);
+        });
+
+        it('should not found on case sensitive (on literal case)', function () {
+            result = cmd.exec('cat Version.txt');
+            assert.equal(result, config.commandNotFoundMessage.message);
+        });
+
         // should throw fileNotFound exception
         // should return content file from regex command
         // should return not found on case sensitive
@@ -70,7 +80,7 @@ describe('Exec commands: text type', function () {
                     "response": "V1.0.0"
                 }
             }, {
-                "command": "type /home/maltempi/anywhere/cacildes.txt",
+                "command": "type c:\\anywhere\\cacildes.txt",
                 "result": {
                     "type": "resultInFile",
                     "filePath": "cacildes.txt"
@@ -92,15 +102,16 @@ describe('Exec commands: text type', function () {
             assert.equal(result, config.commandNotFoundMessage.message);
         });
 
-        it('should return the result of cat version.txt ', function () {
-            result = cmd.exec('type version.txt');
+        it('should return the result of cat version.txt (incluiding case sensitive case) ', function () {
+            result = cmd.exec('type Version.txt');
             assert.equal(result, 'V1.0.0');
         });
 
         it('should return the result of cat cacildes.txt ', function () {
-            result = cmd.exec('type /home/maltempi/anywhere/cacildes.txt');
+            result = cmd.exec('type c:\\anywhere\\cacildes.txt');
             assert.equal(result.length, 3182);
         });
+
 
         // should throw fileNotFound exception
         // should return content file from regex command

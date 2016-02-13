@@ -3,41 +3,31 @@ var fs = require('fs');
 var CommandsMock = function (config) {
     this.config = config;
     this.mockCommandsFilesFolder = this.config.mockCommandsFilesFolder;
+    this.isCaseSensitive = this.config.os === 'linux';
 }
 
 CommandsMock.prototype.exec = function (pCommand) {
 
     var response = '';
-
+    var self = this;
     var commandToExecute = null;
 
     // verifies if command exists
     this.config.commandsMock.forEach(function (commandMock) {
-
-        var commandFound = false;
-
         if (commandMock.regex) {
-            var regex = new RegExp(commandMock.command);
-
-            if (regex.test(pCommand)) {
+            if (self.matchRegex(pCommand, commandMock.command)) {
                 commandToExecute = commandMock;
             }
         } else {
-        	if (pCommand === commandMock.command) {
-            	commandToExecute = commandMock;
+            if (self.matchLiteral(pCommand, commandMock.command)) {
+                commandToExecute = commandMock;
             }
-        }
-
-        if (commandToExecute) {
-            return false;
         }
     });
 
     if (commandToExecute) {
         if (commandToExecute.result.type === 'resultInFile') {
-            var resultFilePath = this.config.mockCommandsFilesFolder 
-            				+ this.config.path 
-            				+ commandToExecute.result.filePath;
+            var resultFilePath = this.config.mockCommandsFilesFolder + this.config.path + commandToExecute.result.filePath;
             response = fs.readFileSync(resultFilePath, 'utf8');
         } else { // text
             response = commandToExecute.result.response;
@@ -48,5 +38,26 @@ CommandsMock.prototype.exec = function (pCommand) {
 
     return response;
 };
+
+CommandsMock.prototype.matchRegex = function (command, regex) {
+    var regex;
+
+    if (this.isCaseSensitive) {
+        regex = new RegExp(regex);
+    } else {
+        regex = new RegExp(regex + '/i');
+    }
+
+    return regex.test(command);
+};
+
+CommandsMock.prototype.matchLiteral = function (commandSent, commandSetted) {
+    if (!this.isCaseSensitive) {
+        commandSent = commandSent.toLowerCase();
+        commandSetted = commandSetted.toLowerCase();
+    }
+
+    return commandSent === commandSetted;
+}
 
 module.exports = CommandsMock;
