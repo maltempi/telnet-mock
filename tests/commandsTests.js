@@ -23,7 +23,14 @@ describe('Exec commands: text type', function () {
                     "type": "resultInFile",
                     "filePath": "cacildes.txt"
                 }
-            }, {
+            }, 
+            {
+                "command": "cat cacildes2.txt",
+                "result": {
+                    "type": "resultInFile",
+                    "filePath": "2.txt"
+                }
+            },{
                 "command": "touch /home/maltempi/d+.csv",
                 "regex": true,
                 "result": {
@@ -60,9 +67,12 @@ describe('Exec commands: text type', function () {
             assert.equal(result, config.commandNotFoundMessage.message);
         });
 
-        // should throw fileNotFound exception
+        it('should fileNotFound message', function() {
+            result = cmd.exec('cat cacildes2.txt');
+            file = config.mockCommandsFilesFolder + "/2.txt"
+            assert.equal(result, 'Telnet Mock exception: The file ' + file + ' does not exists!');
+        });
         // should return content file from regex command
-        // should return not found on case sensitive
     });
 
     describe('Windows happy way', function () {
@@ -92,6 +102,13 @@ describe('Exec commands: text type', function () {
                     "type": "text",
                     "response": ""
                 }
+            },
+            {
+                "command": "type cacildes2.txt",
+                "result": {
+                    "type": "resultInFile",
+                    "filePath": "2.txt"
+                }
             }]
         };
 
@@ -112,10 +129,13 @@ describe('Exec commands: text type', function () {
             assert.equal(result.length, 3182);
         });
 
+        it('should fileNotFound message', function() {
+            result = cmd.exec('type cacildes2.txt');
+            file = config.mockCommandsFilesFolder + "/2.txt"
+            assert.equal(result, 'Telnet Mock exception: The file ' + file + ' does not exists!');
+        });
 
-        // should throw fileNotFound exception
         // should return content file from regex command
-        // should return not found on case sensitive
     });
 
     // TODO: windows happy way

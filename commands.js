@@ -1,4 +1,5 @@
 var fs = require('fs');
+var Util = require('./util');
 
 var CommandsMock = function (config) {
     this.config = config;
@@ -27,8 +28,13 @@ CommandsMock.prototype.exec = function (pCommand) {
 
     if (commandToExecute) {
         if (commandToExecute.result.type === 'resultInFile') {
-            var resultFilePath = this.config.mockCommandsFilesFolder + this.config.path + commandToExecute.result.filePath;
-            response = fs.readFileSync(resultFilePath, 'utf8');
+            var resultFilePath = this.config.mockCommandsFilesFolder + '/' + commandToExecute.result.filePath;
+
+            if (new Util().fileExists(resultFilePath)) {
+                response = fs.readFileSync(resultFilePath, 'utf8');
+            } else {
+                response = 'Telnet Mock exception: The file ' + resultFilePath + ' does not exists!';
+            }
         } else { // text
             response = commandToExecute.result.response;
         }
