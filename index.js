@@ -6,6 +6,7 @@ var Authentication = require('./authentication');
 var CurrentDirectory = require('./currentDirectory');
 var FolderNotFoundValidator = require('./folderNotFound');
 var argv = require('minimist')(process.argv.slice(2));
+var CommandsMock = require('./commands');
 
 // Catch params from commandline
 var configFilePath = argv.configFile || argv.c || './config.json';
@@ -26,6 +27,8 @@ var server = net.createServer(function (sock) {
     this.authentication = new Authentication(configInfo.authentication);
 
     this.currentDirectory = new CurrentDirectory(configInfo);
+
+    this.commandsMock = new CommandsMock(configInfo);
 
     this.lastInformationSent = '';
 
@@ -68,6 +71,12 @@ var server = net.createServer(function (sock) {
     });
 
     this.executeCommand = function (commandSent) {
+
+        var commandResult = this.commandsMock.exec(commandSent);
+
+        if (commandResult.indexOf(configInfo.commandNotFoundMessage.message) === -1) {
+            return commandResult;
+        }
 
         if (! new FolderNotFoundValidator(configInfo, commandSent).isExist) {
             return configInfo.folderNotFoundMessage.message;
