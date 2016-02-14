@@ -9,7 +9,14 @@ var argv = require('minimist')(process.argv.slice(2));
 var CommandsMock = require('./commands');
 
 // Catch params from commandline
-var configFilePath = argv.configFile || argv.c || './config.json';
+var configFilePath = argv.configFile || argv.c;
+
+if (!configFilePath) {
+    console.log('FATAL: You must pass a jsonFile with configurations.\n' +
+        'See the README on github.com/maltempi/telnet-mock to know how configure it.');
+    process.exit();
+}
+
 var port = argv.port || argv.p || '3000';
 
 var net = require("net");

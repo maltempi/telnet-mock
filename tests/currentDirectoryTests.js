@@ -1,6 +1,6 @@
 var assert = require('assert');
 
-var CurrentDirectory = require('../currentDirectory');
+var CurrentDirectory = require('../src/currentDirectory');
 
 describe('CD Path', function () {
 

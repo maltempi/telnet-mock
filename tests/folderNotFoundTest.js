@@ -1,6 +1,6 @@
 var assert = require('assert');
 
-var FolderNotFoundValidator = require('../folderNotFound');
+var FolderNotFoundValidator = require('../src/folderNotFound');
 
 describe('Folder exists', function () {
 

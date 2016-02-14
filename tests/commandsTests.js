@@ -1,6 +1,6 @@
 var assert = require('assert');
 
-var CommandExec = require('../commands');
+var CommandExec = require('../src/commands');
 
 describe('Exec commands: text type', function () {
     describe('Linux happy way', function () {
