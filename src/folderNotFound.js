@@ -44,7 +44,6 @@ FolderNotFoundValidator.prototype.exists = function (folderPath) {
 
     token.forEach(function (folder, index) {
         if (folder.indexOf(self.config.path) > -1) {
-            console.log('pushing ' + folder);
             folders.push(folder);
         }
     });

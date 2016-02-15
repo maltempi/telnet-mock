@@ -12,7 +12,7 @@ var CommandsMock = require('./commands');
 var configFilePath = argv.configFile || argv.c;
 
 if (!configFilePath) {
-    console.log('FATAL: You must pass a jsonFile with configurations.\n' +
+    console.log('You must pass a jsonFile with configurations.\n' +
         'See the README on github.com/maltempi/telnet-mock to know how configure it.');
     process.exit();
 }
