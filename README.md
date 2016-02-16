@@ -44,124 +44,69 @@ NodeJS (Tested on 4.2.2)
 
 ##### Creating a Config Json File
 
-Exists an example on root folder of this project (config_sample.json).
+Exists an example on root folder of this project with all features (config_sample.json). Below is a list of definitions of each configuration.
 
-Obs. I will think in a better way to documentate it better. :-)
+- path (str, required) - Acceptable values: / or \\
 
-> .path
-$	str
-$	Mandatory
-$	Acceptable values: / or \\
+- os (str, required) - Acceptable values: windows or linux
 
-> .os 
-$	str
-$	Mandatory
-$	Acceptable values: windows or linux
+- helloMessage (obj)
 
-> .helloMessage
-$	Doesn't mandatory
-$	obj
+- helloMessage.message (str, required)
 
-> .helloMessage.message
-$	String
-$	Mandatory
+- authentication (obj)
 
-> .authentication
-$	Doesn't mandatory
-$	obj
+- authentication.askForUserMessage (str, required)
 
-> .authentication.askForUserMessage
-$	Mandatory
-$	String
+- authentication.askForPasswdMessage (str, required)
 
-> .authentication.askForPasswdMessage
-$	Mandatory
-$	String
+- authentication.onSuccessMessage (str, required)
 
-> .authentication.onSuccessMessage
-$	Mandatory
-$	String
+- authentication.onInvalidUserMessage (str, required)
 
-> .authentication.onInvalidUserMessage
-$	Mandatory
-$	String
+- authentication.onMaxAttemptMessage (str, required)
 
-> .authentication.onMaxAttemptMessage
-$	Mandatory
-$	String
+- authentication.maxAttempts (int, required)
 
-> .authentication.maxAttempts
-$	Mandatory
-$	Integer
+- authentication.validUsers (list of object, required)
 
-> .authentication.validUsers
-$	Mandatory
-$	List of objects
+- authentication.validUsers.login (str, required)
 
-> .authentication.validUsers.login
-$	Mandatory
-$	String
+- authentication.validUsers.password (str, required)
 
-> .authentication.validUsers.password
-$	Mandatory
-$	String
+- authentication.validUsers.initialFolder (str, required)
 
-> .authentication.validUsers.initialFolder
-$	Mandatory
-$	String
+- folderNotFound (list of str, required)
 
+- folderNotFoundMessage (obj, required)
 
-> .folerNotFound
-$	Mandatory
-$	List Of String
+- folderNotFoundMessage.message (obj, required)
 
-> .folderNotFoundMessage
-$	Mandatory
-$	Object
+- mockCommandsFilesFolder (requied, string)
+	- Description: You can pass files content as return of one command, so, all of them need stay in the same place.
 
-> .folderNotFoundMessage.message
-$	Mandatory
-$	String
+- commandNotFoundMessage (obj, required)
 
-> .mockCommandsFilesFolder
-$	Mandatory
-$	String
-$	Description: you can pass files content as return of one command, so, all of them need stay in the same place.
+- commandNotFoundMessagemessage (str, required)
 
-> .commandNotFoundMessage
-$	Mandatory
-$	Object
+- commandsMock (list of obj, required)
 
-> .commandNotFoundMessagemessage
-$	Mandatory
-$	String
+- commandsMock.command (str, required) - command that client will send to server. Also is possible pass a regex.
+	-  Obs. If you want use a scape to back-slash (\\), you can pass a variable {bslash}, eg:
+	   "command": 'find test c:{bslash}folder{bslash}\\d+.csv'
+			will be translate to:
+	 "command": 'find test c:\\\\folder\\\\\\d+.csv'
 
-> .commandsMock
-$	Mandatory
-$	List of objects
+- comandsMock.regex (bool) - Indicate that command uses regex. Mandatory when command is using regex.
 
-> .commandsMock.command
-$	Mandatory
-$	String
-$	Description: command that client will send to server
+- commandsMock.result (obj, required)
 
-> .commandsMock.result
-$	Mandatory
-$	Object
+- commandsMock.result.type (str, required) Accepted values: text or resultInFile
 
-> .commandsMock.result.type
-$	Mandatory
-$	string
-$	Accepted values: text or resultInFile
+- commandsMock.result.response (str, required) - Response to command. Require only when type is text
 
-> .commandsMock.result.response
-$	Mandatory on type is text
-$	string
-
-> .commandsMock.result.filePath
-$	Mandatory on type is resultInFile
-$	String
-$	Must be a relative path from mockCommandsFilesFolder property
+- commandsMock.result.filePath (str, required) - Filepath to response wanted. Require only when type is resultInFile.
+	- Must be a relative path from mockCommandsFilesFolder property
 
 
 ##### Running
