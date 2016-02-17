@@ -1,12 +1,10 @@
 {
   "name": "telnet-mock",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "version": "0.0.1",
+  "description": "A tiny configurable telnet server emulator",
+  "main": "src/index.js",
   "author": "tmmaltempi@gmail.com",
+  "repository": "https://github.com/maltempi/telnet-mock",
   "license": "MIT",
   "dependencies": {
     "minimist": "^1.2.0",
