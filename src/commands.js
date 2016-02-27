@@ -1,28 +1,31 @@
 var fs = require('fs');
 var Util = require('./util');
 
-var CommandsMock = function (config) {
-    this.config = config;
+var CommandsMock = function(globalConfig, commandsConfig) {
+    this.config = globalConfig;
+    this.commandsConfig = commandsConfig || this.config.commandsMock;
     this.mockCommandsFilesFolder = this.config.mockCommandsFilesFolder;
     this.isCaseSensitive = this.config.os === 'linux';
+    this.util = new Util();
 }
 
-CommandsMock.prototype.exec = function (pCommand) {
+CommandsMock.prototype.exec = function(pCommand) {
 
     var response = '';
     var self = this;
     var commandToExecute = null;
 
     // verifies if command exists
-    this.config.commandsMock.forEach(function (commandMock) {
+    this.commandsConfig.forEach(function(commandMock) {
+
         if (commandMock.regex) {
-            if (self.matchRegex(pCommand, commandMock.command)) {
-                commandToExecute = commandMock;
-            }
+            match = self.util.matchRegex(pCommand, commandMock.command, self.isCaseSensitive);
         } else {
-            if (self.matchLiteral(pCommand, commandMock.command)) {
-                commandToExecute = commandMock;
-            }
+            match = self.util.matchLiteral(pCommand, commandMock.command, self.isCaseSensitive);
+        }
+
+        if (match) {
+            commandToExecute = commandMock;
         }
     });
 
@@ -44,28 +47,5 @@ CommandsMock.prototype.exec = function (pCommand) {
 
     return response;
 };
-
-CommandsMock.prototype.matchRegex = function (command, regex) {
-    var regexExp;
-
-    regex = regex.replace(/\{bslash\}/g, '\\\\');
-
-    if (this.isCaseSensitive) {
-        regexExp = new RegExp(regex);
-    } else {
-        regexExp = new RegExp(regex, 'i');
-    }
-
-    return regexExp.test(command);
-};
-
-CommandsMock.prototype.matchLiteral = function (commandSent, commandSetted) {
-    if (!this.isCaseSensitive) {
-        commandSent = commandSent.toLowerCase();
-        commandSetted = commandSetted.toLowerCase();
-    }
-
-    return commandSent === commandSetted;
-}
 
 module.exports = CommandsMock;
