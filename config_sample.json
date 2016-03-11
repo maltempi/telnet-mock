@@ -40,6 +40,29 @@
   "commandNotFoundMessage": {
     "message": "command not found"
   },
+  "shells": [
+    {
+      "name": "python",
+      "command": "python.*",
+      "regex": true,
+      "commandToExit": "exit()",
+      "shellCommands": [
+        {
+          "command" : "print \"hello world!\"",
+          "result": {
+            "type": "text",
+            "respn": "hello world!"
+          }
+        },
+        {
+          "command" : "print \\d",
+          "regex" : true,
+          "type": "resultInFile",
+          "filePath": "./printSomething.txt"
+        }
+      ]
+    }
+  ],
   "commandsMock": [
     {
       "command": "ls /home/maltempi/some_folder",
@@ -57,7 +80,7 @@
     },
     {
       "command": "touch /home/maltempi/d+.csv",
-      "regex" : true,
+      "regex": true,
       "result": {
         "type": "text",
         "response": ""
