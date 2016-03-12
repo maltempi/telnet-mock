@@ -10,7 +10,7 @@ var FolderNotFoundValidator = function (config, folderPath) {
 };
 
 /**
-    TODO: It has been a ugly method. I really want refactor that :D
+    TODO: It has been an ugly method. I really want refactor that :D
 */
 FolderNotFoundValidator.prototype.exists = function (folderPath) {
     var exists = true;
@@ -47,8 +47,6 @@ FolderNotFoundValidator.prototype.exists = function (folderPath) {
             folders.push(folder);
         }
     });
-
-    console.log(folders);
 
     this.config.foldersNotFound.forEach(function (folderNotFound) {
 

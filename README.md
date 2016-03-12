@@ -1,6 +1,6 @@
 # Telnet Mock
 
-A opensource NodeJS project to emulate a telnet server.
+An opensource NodeJS project to emulate a telnet server.
 You just need set up a configuration json file with the behavior that you want.
 
 #### Features

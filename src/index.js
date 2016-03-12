@@ -7,6 +7,7 @@ var CurrentDirectory = require('./currentDirectory');
 var FolderNotFoundValidator = require('./folderNotFound');
 var argv = require('minimist')(process.argv.slice(2));
 var CommandsMock = require('./commands');
+var ShellCommands = require('./shellCommands');
 
 // Catch params from commandline
 var configFilePath = argv.configFile || argv.c;
@@ -37,6 +38,8 @@ var server = net.createServer(function (sock) {
 
     this.commandsMock = new CommandsMock(configInfo);
 
+    this.shellCommands = new ShellCommands(configInfo);
+
     this.lastInformationSent = '';
 
     var self = this;
@@ -50,7 +53,7 @@ var server = net.createServer(function (sock) {
         console.log('Command Received ->' + line);
 
         if (self.authentication.isAuthenticated) {
-            response = self.executeCommand(line);
+            var response = self.executeCommand(line);
             self.sendToClient(response);
         } else {
             self.authenticationUI(line);
@@ -77,7 +80,20 @@ var server = net.createServer(function (sock) {
         }
     });
 
+    // TODO: REFACTORY IT! this would be a specific module that manage some command send by client
     this.executeCommand = function (commandSent) {
+
+        if (this.shellCommands.isOnShell()) {
+            var response = this.shellCommands.exec(commandSent);
+            response += '\n' + this.shellCommands.selectedShell.lastLineResponse;
+            return response + '\n';
+        }
+        
+        if (this.shellCommands.enterShell(commandSent)) {
+            var response =  this.shellCommands.selectedShell.messageOnEnter;
+            response += '\n' + this.shellCommands.selectedShell.lastLineResponse;
+            return response + '\n';
+        }
 
         var commandResult = this.commandsMock.exec(commandSent);
 
@@ -85,7 +101,7 @@ var server = net.createServer(function (sock) {
             return commandResult;
         }
 
-        if (! new FolderNotFoundValidator(configInfo, commandSent).isExist) {
+        if (!new FolderNotFoundValidator(configInfo, commandSent).isExist) {
             return configInfo.folderNotFoundMessage.message;
         }
 
@@ -112,7 +128,7 @@ var server = net.createServer(function (sock) {
             this.password = message;
             var authMessage = this.authentication.authenticateHighLevelMessage(this.user, this.password)
             self.currentDirectory.folder = self.authentication.initialFolder;
-            this.sendToClient(authMessage); // do authentication here
+            this.sendToClient(authMessage); // does the authentication here
         } else {
             this.sendToClient(authConfig.askForUserMessage);
             return;
@@ -122,9 +138,9 @@ var server = net.createServer(function (sock) {
     this.sendToClient = function (message) {
         self.lastInformationSent = message;
 
-        if (self.currentDirectory.folder) {
-            message += '\n' + self.currentDirectory.folder + '>' /* TODO: end of file be a config */ ;
-        }
+        if (self.currentDirectory.folder && !self.shellCommands.isOnShell()) {
+            message += '\n' + self.currentDirectory.folder + '>' /* TODO: end of file be a config */;
+        } 
 
         console.log('Message sent -> ' + message);
 

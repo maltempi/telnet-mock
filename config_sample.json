@@ -1,90 +1,94 @@
 {
-  "path": "/",
-  "os": "linux",
-  "helloMessage": {
-    "message": "Hello, I love you, wont tell me your name? - Doors\n"
-  },
-  "authentication": {
-    "askForUserMessage": "User:",
-    "askForPasswdMessage": "Password:",
-    "onSuccessMessage": "Hello!",
-    "onInvalidUserMessage": "Wrong! Try again!",
-    "onMaxAttemptsMessage": "Max attempts, sorry!",
-    "maxAttempts": 3,
-    "validUsers": [
-      {
-        "login": "user",
-        "password": "1234",
-        "initialFolder": "/home/user/"
-      },
-      {
-        "login": "root",
-        "password": "root",
-        "initialFolder": "/root/"
-      }
-    ]
-  },
-  "foldersNotFound": [
-    "/root/nf"
-  ],
-  "folderNotFoundMessage": {
-    "message": "Not Found"
-  },
-  "foldersMock": [
-    {
-      "expected": "C:\\temp\\",
-      "mock": "/home/maltempi/temp"
-    }
-  ],
-  "mockCommandsFilesFolder": "/home/maltempi/mock-telnet/",
-  "commandNotFoundMessage": {
-    "message": "command not found"
-  },
-  "shells": [
-    {
-      "name": "python",
-      "command": "python.*",
-      "regex": true,
-      "commandToExit": "exit()",
-      "shellCommands": [
+    "path": "/",
+    "os": "linux",
+    "helloMessage": {
+        "message": "Hello, I love you, wont tell me your name? - Doors\n"
+    },
+    "authentication": {
+        "askForUserMessage": "User:",
+        "askForPasswdMessage": "Password:",
+        "onSuccessMessage": "Hello!",
+        "onInvalidUserMessage": "Wrong! Try again!",
+        "onMaxAttemptsMessage": "Max attempts, sorry!",
+        "maxAttempts": 3,
+        "validUsers": [
+            {
+                "login": "user",
+                "password": "1234",
+                "initialFolder": "/home/user/"
+            },
+            {
+                "login": "root",
+                "password": "root",
+                "initialFolder": "/root/"
+            }
+        ]
+    },
+    "foldersNotFound": [
+        "/root/nf"
+    ],
+    "folderNotFoundMessage": {
+        "message": "Not Found"
+    },
+    "foldersMock": [
         {
-          "command" : "print \"hello world!\"",
-          "result": {
-            "type": "text",
-            "respn": "hello world!"
-          }
+            "expected": "C:\\temp\\",
+            "mock": "/home/maltempi/temp"
+        }
+    ],
+    "mockCommandsFilesFolder": "/home/maltempi/mock-telnet/",
+    "commandNotFoundMessage": {
+        "message": "command not found"
+    },
+    "shells": [
+        {
+            "name": "python",
+            "command": "python",
+            "messageOnEnter": "Python 2.7.10",
+            "commandToExit": "exit()",
+            "lastLineResponse": ">>>",
+            "commandNotFoundMessage": {
+                "message": "not found"
+            },
+            "shellCommands": [
+                {
+                    "command": "print \"hello world!\"",
+                    "result": {
+                        "type": "text",
+                        "response": "hello world!"
+                    }
+                },
+                {
+                    "command": "print \\d",
+                    "regex": true,
+                    "type": "resultInFile",
+                    "filePath": "./printSomething.txt"
+                }
+            ]
+        }
+    ],
+    "commandsMock": [
+        {
+            "command": "ls /home/maltempi/some_folder",
+            "result": {
+                "type": "text",
+                "response": "oneFolder/  oneFile.txt\notherFolder\notherfile.txt"
+            }
         },
         {
-          "command" : "print \\d",
-          "regex" : true,
-          "type": "resultInFile",
-          "filePath": "./printSomething.txt"
+            "command": "cat someFile.txt",
+            "result": {
+                "type": "resultInFile",
+                "filePath": "./cat_someFile.txt"
+            }
+        },
+        {
+            "command": "touch /home/maltempi/d+.csv",
+            "regex": true,
+            "result": {
+                "type": "text",
+                "response": ""
+            }
         }
-      ]
-    }
-  ],
-  "commandsMock": [
-    {
-      "command": "ls /home/maltempi/some_folder",
-      "result": {
-        "type": "text",
-        "response": "oneFolder/  oneFile.txt\notherFolder\notherfile.txt"
-      }
-    },
-    {
-      "command": "cat someFile.txt",
-      "result": {
-        "type": "resultInFile",
-        "filePath": "./cat_someFile.txt"
-      }
-    },
-    {
-      "command": "touch /home/maltempi/d+.csv",
-      "regex": true,
-      "result": {
-        "type": "text",
-        "response": ""
-      }
-    }
-  ]
+    ]
 }

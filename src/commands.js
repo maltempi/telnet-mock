@@ -17,6 +17,7 @@ CommandsMock.prototype.exec = function(pCommand) {
 
     // verifies if command exists
     this.commandsConfig.forEach(function(commandMock) {
+        var match = null;
 
         if (commandMock.regex) {
             match = self.util.matchRegex(pCommand, commandMock.command, self.isCaseSensitive);
