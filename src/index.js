@@ -85,12 +85,16 @@ var server = net.createServer(function (sock) {
 
         if (this.shellCommands.isOnShell()) {
             var response = this.shellCommands.exec(commandSent);
-            response += '\n' + this.shellCommands.selectedShell.lastLineResponse;
+            var lastLineResponse = this.shellCommands.selectedShell !== null ?
+                    this.shellCommands.selectedShell.lastLineResponse : "";
+
+            response += '\n' + lastLineResponse;
+
             return response + '\n';
         }
-        
+
         if (this.shellCommands.enterShell(commandSent)) {
-            var response =  this.shellCommands.selectedShell.messageOnEnter;
+            var response = this.shellCommands.selectedShell.messageOnEnter;
             response += '\n' + this.shellCommands.selectedShell.lastLineResponse;
             return response + '\n';
         }
@@ -139,8 +143,8 @@ var server = net.createServer(function (sock) {
         self.lastInformationSent = message;
 
         if (self.currentDirectory.folder && !self.shellCommands.isOnShell()) {
-            message += '\n' + self.currentDirectory.folder + '>' /* TODO: end of file be a config */;
-        } 
+            message += '\n' + self.currentDirectory.folder + '>' /* TODO: end of file be a config */ ;
+        }
 
         console.log('Message sent -> ' + message);
 

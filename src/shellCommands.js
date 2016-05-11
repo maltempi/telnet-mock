@@ -3,7 +3,7 @@ var CommandsMock = require('./commands');
 
 var ShellCommands = function (config) {
     this.config = config;
-    this.shellsConfig = config.shells;
+    this.shellsConfig = config.shells || [];
     this.selectedShell = null;
     this.util = new Util();
     this.isCaseSensitive = this.config.os === 'linux';
@@ -35,12 +35,14 @@ ShellCommands.prototype.exec = function(command) {
 
     var result = this.commandsMock.exec(command);
     
-    if (result === this.selectedShell.commandNotFoundMessage.message) {
-        var match = self.util.matchLiteral(command, this.selectedShell.commandToExit, self.isCaseSensitive);
-        
+    if (result === this.config.commandNotFoundMessage.message) {
+        var match = this.util.matchLiteral(command, this.selectedShell.commandToExit, this.isCaseSensitive);
+
         if (match) {
             result = 'exit';
             this.selectedShell = null;
+        } else {
+            result = this.selectedShell.commandNotFoundMessage.message;
         }
     }
     
